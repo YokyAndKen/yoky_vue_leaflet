@@ -1,10 +1,45 @@
 <template>
-  <nav>
+  <!-- <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
-  <router-view/>
+  <router-view/> -->
+  <div id="map"></div>
+  <!-- <draw-tool></draw-tool> -->
 </template>
+
+<script lang='ts'>
+// import { defineComponent } from '@vue/composition-api'
+
+import { onMounted, provide } from '@vue/runtime-core'
+import L from 'leaflet'
+// import DrawTool from './components/drawTool.vue'
+
+export default {
+  name: 'App',
+  // components: {
+  //   DrawTool
+  // },
+  setup() {
+    let map = {}
+    let parent = { map };
+    provide('map', parent);
+    onMounted(() => {
+      map = L.map('map', {
+        crs: L.CRS.EPSG4326,
+        center: [40, 118],
+        maxZoom: 18,
+        zoom: 6,
+      })
+      parent.map = map;
+      let url = "https://iserver.supermap.io/iserver/services/map-world/rest/maps/World";
+      L.supermap.tiledMapLayer(url , {noWrap: true}).addTo(map);
+    })
+
+  },
+}
+</script>
+
 
 <style>
 #app {
